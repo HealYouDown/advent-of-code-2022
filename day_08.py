@@ -1,19 +1,20 @@
+import timer
+
 GRID = list[list[int]]
 
 
-def is_outer(grid: GRID, index: tuple[int, int]):
+def is_edge(grid: GRID, index: tuple[int, int]):
     x, y = index
     return x == 0 or x == len(grid[0]) - 1 or y == 0 or y == len(grid) - 1
 
 
 def is_visible(grid: GRID, index: tuple[int, int]) -> bool:
     # outer border is always visible, no matter the height
-    if is_outer(grid, index):
+    if is_edge(grid, index):
         return True
 
     x, y = index
     height = grid[y][x]
-
 
     # Consider all trees towards the edge
     is_visible_left = all(j < height for j in grid[y][:x])
@@ -28,7 +29,7 @@ def is_visible(grid: GRID, index: tuple[int, int]) -> bool:
 def calculate_scenic_score(grid: GRID, index: tuple[int, int]) -> int:
     # outer border will result in a viewing distance of 0, so our end product
     # would be 0 anyways, so we can return it without doing other checks
-    if is_outer(grid, index):
+    if is_edge(grid, index):
         return 0
 
     x, y = index
@@ -55,6 +56,7 @@ def calculate_scenic_score(grid: GRID, index: tuple[int, int]) -> int:
     return trees_left * trees_right * trees_top * trees_bottom
 
 
+@timer.timer
 def puzzle_1(grid: GRID) -> int:
     count = 0
     for y in range(len(grid)):
@@ -64,6 +66,7 @@ def puzzle_1(grid: GRID) -> int:
     return count
 
 
+@timer.timer
 def puzzle_2(grid: GRID) -> int:
     biggest_scenic_score = -1
     for y in range(len(grid)):
@@ -75,9 +78,13 @@ def puzzle_2(grid: GRID) -> int:
     return biggest_scenic_score
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> GRID:
     with open("inputs/day_08.txt", "r") as fp:
-        grid = [[int(j) for j in row.strip()] for row in fp.readlines()]
+        return [[int(j) for j in row.strip()] for row in fp.readlines()]
 
+
+if __name__ == "__main__":
+    grid = parse_input()
     print(puzzle_1(grid))
     print(puzzle_2(grid))

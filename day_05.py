@@ -1,11 +1,12 @@
 # DISCLAIMER:
 # I was challenged to produce the most useless code around the problem.
 # Also I was bored.
-
 import math
 import re
 from dataclasses import dataclass
 from typing import Any, Generic, Literal, Type, TypeVar
+
+import timer
 
 T = TypeVar("T")
 
@@ -149,7 +150,7 @@ class Instruction:
         return cls(amount=int(parsed["amount"]), from_=int(parsed["from"]), to=int(parsed["to"]))
 
 
-
+@timer.timer
 def puzzle_1(stack_list: StackList[Any], instructions: list[Instruction]) -> int:
     for instruction in instructions:
         stack_list.apply_instruction(instruction, "CrateMover 9000")
@@ -157,6 +158,7 @@ def puzzle_1(stack_list: StackList[Any], instructions: list[Instruction]) -> int
     return "".join(s.first for s in stack_list.stacks)
 
 
+@timer.timer
 def puzzle_2(stack_list: StackList[Any], instructions: list[Instruction]) -> int:
     for instruction in instructions:
         stack_list.apply_instruction(instruction, "CrateMover 9001")
@@ -164,14 +166,21 @@ def puzzle_2(stack_list: StackList[Any], instructions: list[Instruction]) -> int
     return "".join(s.first for s in stack_list.stacks)
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> tuple[StackList, list[Instruction]]:
     with open("inputs/day_05.txt", "r") as fp:
         raw_stacks, raw_instructions = fp.read().split("\n\n")
-    
-    instructions = [Instruction.parse_from_row(row) for row in raw_instructions.splitlines()]
 
+    instructions = [Instruction.parse_from_row(row) for row in raw_instructions.splitlines()]
     stack = StackList.parse_from_input(raw_stacks)
+
+    return stack, instructions
+
+
+if __name__ == "__main__":
+    stack, instructions = parse_input()
     print(puzzle_1(stack, instructions))
     
-    stack =  StackList.parse_from_input(raw_stacks)
+    # Parse again because the first stack object was modified
+    stack, instructions = parse_input()
     print(puzzle_2(stack, instructions))

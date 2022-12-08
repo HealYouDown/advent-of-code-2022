@@ -1,5 +1,7 @@
 from typing import Optional
 
+import timer
+
 
 class Node:
     def __init__(self, parent: Optional["Node"] = None) -> None:
@@ -50,6 +52,7 @@ def get_all_dirs(root: Node) -> list[Dir]:
     return dirs
 
 
+@timer.timer
 def puzzle_1(root: Node) -> int:
     total_size = 0
     for dir in [root, *get_all_dirs(root)]:
@@ -60,6 +63,7 @@ def puzzle_1(root: Node) -> int:
     return total_size
 
 
+@timer.timer
 def puzzle_2(root: Node) -> int:
     # available space: 70_000_000
     # required space to update: 30_000_000
@@ -77,7 +81,8 @@ def puzzle_2(root: Node) -> int:
     return min_folder_size
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> Dir:
     with open("inputs/day_07.txt", "r") as fp:
         root = Dir(parent=None, name="/")
         current_node: Node = None
@@ -106,5 +111,10 @@ if __name__ == "__main__":
                 else:
                     File(parent=current_node, name=arg2, size=int(arg1))
 
-        print(puzzle_1(root))
-        print(puzzle_2(root))
+    return root
+
+
+if __name__ == "__main__":
+    root = parse_input()
+    print(puzzle_1(root))
+    print(puzzle_2(root))

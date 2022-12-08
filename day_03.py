@@ -1,7 +1,11 @@
 import string
 
+import timer
+
 CHAR_TO_SCORE = {char: i for i, char in enumerate(string.ascii_letters, start=1)}
 
+
+@timer.timer
 def puzzle_1(backpacks: list[str]) -> int:
     score = 0
     for backpack in backpacks:
@@ -15,6 +19,7 @@ def puzzle_1(backpacks: list[str]) -> int:
     return score
 
 
+@timer.timer
 def puzzle_2(backpacks: list[str]) -> int:
     score = 0
     for i in range(len(backpacks)//3):
@@ -26,9 +31,13 @@ def puzzle_2(backpacks: list[str]) -> int:
     return score
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> list[str]:
     with open("inputs/day_03.txt", "r") as fp:
-        backpacks = [r.strip() for r in fp.readlines()]
+        return [r.strip() for r in fp.readlines()]
 
+
+if __name__ == "__main__":
+    backpacks = parse_input()
     print(puzzle_1(backpacks))
     print(puzzle_2(backpacks))

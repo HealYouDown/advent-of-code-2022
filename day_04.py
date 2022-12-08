@@ -1,8 +1,12 @@
+import timer
+
+
 def get_range_from_string(s: str) -> set[int]:
     a, b = [int(i) for i in s.split("-")]
     return set(range(a, b+1))
 
 
+@timer.timer
 def puzzle_1(pairs: list[tuple[str, str]]) -> int:
     counter = 0
     for a, b in pairs:
@@ -16,6 +20,7 @@ def puzzle_1(pairs: list[tuple[str, str]]) -> int:
     return counter
 
 
+@timer.timer
 def puzzle_2(pairs: list[tuple[str, str]]) -> int:
     counter = 0
     for a, b in pairs:
@@ -29,9 +34,13 @@ def puzzle_2(pairs: list[tuple[str, str]]) -> int:
     return counter
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> list[tuple[str, str]]:
     with open("inputs/day_04.txt", "r") as fp:
-        pairs = [r.strip().split(",") for r in fp.readlines()]
+        return [r.strip().split(",") for r in fp.readlines()]
 
+
+if __name__ == "__main__":
+    pairs = parse_input()
     print(puzzle_1(pairs))
     print(puzzle_2(pairs))

@@ -1,19 +1,7 @@
-# Enemy:
-# A = Rock
-# B = Paper
-# C = Scissors
-
-# Me:
-# X = Rock
-# Y = Paper
-# Z = Scissors
-
-# Part 2: Ending
-# X = Lose
-# Y = Draw
-# Z = Win
+import timer
 
 
+@timer.timer
 def puzzle_1(rounds: list[tuple[str, str]]) -> int:
     score = 0
     for round in rounds:
@@ -45,6 +33,7 @@ def puzzle_1(rounds: list[tuple[str, str]]) -> int:
     return score
 
 
+@timer.timer
 def puzzle_2(rounds: list[tuple[str, str]]) -> int:
     score = 0
     for round in rounds:
@@ -81,9 +70,13 @@ def puzzle_2(rounds: list[tuple[str, str]]) -> int:
     return score
 
 
-if __name__ == "__main__":
+@timer.timer
+def parse_input() -> list[tuple[str, str]]:
     with open("inputs/day_02.txt", "r") as fp:
-        rounds = [tuple(row.strip().split(" ")) for row in fp.readlines()]
+        return [tuple(row.strip().split(" ")) for row in fp.readlines()]
 
+
+if __name__ == "__main__":
+    rounds = parse_input()
     print(puzzle_1(rounds))
     print(puzzle_2(rounds))
